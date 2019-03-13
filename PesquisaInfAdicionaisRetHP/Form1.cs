@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -23,6 +18,9 @@ namespace PesquisaInfAdicionaisRetHP
 
         private void btnLoadFile_Click(object sender, EventArgs e)
         {
+            btnProcessFile.Enabled = false;
+            btnSalveResult.Enabled = false;
+
             #region configurando componente OpenFolderDialog
             ofdMain.Filter = "(*.xml)|*.xml";
             ofdMain.Title = "Arquivo de Retorno Hermes Pardini";
@@ -35,6 +33,7 @@ namespace PesquisaInfAdicionaisRetHP
                 fileXML = ofdMain.FileName;
                 // imprimindo conteúdo de campo global a barra de título do form
                 this.Text = fileXML;
+                btnProcessFile.Enabled = true;
             }
 
             // atribuindo conteúdo de campo global ao componente textBox
@@ -102,6 +101,7 @@ namespace PesquisaInfAdicionaisRetHP
                     }
                     // populando textBox (rodapé de conteúdo)
                     txtDados.AppendText("\r\n\r\nselect COUNT(*) Quantidade, Descricao, Valor from #teste group by Descricao, Valor order by COUNT(*) desc;\n");
+                    btnSalveResult.Enabled = true;
                 }
                 // caso não for encontrado algum arquivo, dispara esta mensagem
                 else
@@ -122,5 +122,44 @@ namespace PesquisaInfAdicionaisRetHP
             return string.Format("insert into #teste select '{0}', {1}, '{2}', '{3}';\n", CodExmApoio, InfAdicional, Descricao, Valor);
         }
 
+        private void btnSalveResult_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Title = "Save result in ...";
+                sfd.Filter = "SQL File|*.sql";
+                sfd.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                sfd.FileName = "resultado-consulta";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    MessageBox.Show(sfd.FileName);
+                    System.IO.File.WriteAllText(sfd.FileName, txtDados.Text);
+                    if (System.IO.File.Exists(sfd.FileName))
+                    {
+                        MessageBox.Show(string.Format("Arquivo ({0}) criado com sucesso", sfd.FileName), "Status ação", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        OpenAndSelectPath(sfd.FileName);
+                    }
+                }
+            }
+        }
+
+        private void OpenAndSelectPath(string path)
+        {
+            bool isfile = System.IO.File.Exists(path);
+            if (isfile)
+            {
+                string argument = @"/select, " + path;
+                System.Diagnostics.Process.Start("explorer.exe", argument);
+            }
+            else
+            {
+                bool isfolder = System.IO.Directory.Exists(path);
+                if (isfolder)
+                {
+                    string argument = @"/select, " + path;
+                    System.Diagnostics.Process.Start("explorer.exe", argument);
+                }
+            }
+        }
     }
 }

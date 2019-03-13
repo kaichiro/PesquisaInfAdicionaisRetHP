@@ -40,6 +40,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.lblPercCorrente = new System.Windows.Forms.Label();
+            this.btnSalveResult = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnLoadFile
@@ -65,6 +66,7 @@
             // 
             // btnProcessFile
             // 
+            this.btnProcessFile.Enabled = false;
             this.btnProcessFile.Location = new System.Drawing.Point(527, 12);
             this.btnProcessFile.Name = "btnProcessFile";
             this.btnProcessFile.Size = new System.Drawing.Size(75, 23);
@@ -143,11 +145,23 @@
             this.lblPercCorrente.TabIndex = 8;
             this.lblPercCorrente.Text = "00000";
             // 
+            // btnSalveResult
+            // 
+            this.btnSalveResult.Enabled = false;
+            this.btnSalveResult.Location = new System.Drawing.Point(13, 286);
+            this.btnSalveResult.Name = "btnSalveResult";
+            this.btnSalveResult.Size = new System.Drawing.Size(75, 23);
+            this.btnSalveResult.TabIndex = 11;
+            this.btnSalveResult.Text = "&Save Result";
+            this.btnSalveResult.UseVisualStyleBackColor = true;
+            this.btnSalveResult.Click += new System.EventHandler(this.btnSalveResult_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(621, 400);
+            this.Controls.Add(this.btnSalveResult);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.lblPercCorrente);
@@ -180,6 +194,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lblPercCorrente;
+        private System.Windows.Forms.Button btnSalveResult;
     }
 }
 
